@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String     @id @default(cuid())
+  email      String     @unique
+  password   String
+  name       String?
+  role       Role       @default(USER)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  address    String?
+  avatarUrl  String?
+  bio        String?
+  city       String?
+  phone      String?
+  postalCode String?
+  marketingConsent     Boolean  @default(false)
+  dataProcessingConsent Boolean  @default(false)
+  consentDate          DateTime?
+  documents  Document[]
+  orders     Order[]
+}
+
+model Course {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  price       Float
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  videoUrl    String?
+  orders      Order[]
+}
+
+model Order {
+  id        String      @id @default(cuid())
+  userId    String
+  courseId  String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  status    OrderStatus @default(PENDING)
+  amount    Float
+  paymentId String
+  course    Course      @relation(fields: [courseId], references: [id])
+  user      User        @relation(fields: [userId], references: [id])
+}
+
+model Document {
+  id        String   @id @default(cuid())
+  userId    String
+  createdAt DateTime @default(now())
+  name      String
+  url       String
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+enum DocumentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
