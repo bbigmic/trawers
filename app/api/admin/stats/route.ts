@@ -5,6 +5,15 @@ export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
+    // Sprawdź czy baza danych jest dostępna
+    if (!process.env.DATABASE_URL) {
+      console.error('Brak DATABASE_URL')
+      return NextResponse.json(
+        { error: 'Baza danych nie jest skonfigurowana' },
+        { status: 500 }
+      )
+    }
+
     const [
       totalCourses,
       totalOrders,
@@ -38,9 +47,13 @@ export async function GET() {
     })
   } catch (error) {
     console.error('Błąd podczas pobierania statystyk:', error)
-    return NextResponse.json(
-      { error: 'Błąd podczas pobierania statystyk' },
-      { status: 500 }
-    )
+    
+    // Zwróć dane domyślne w przypadku błędu
+    return NextResponse.json({
+      totalCourses: 0,
+      totalOrders: 0,
+      totalRevenue: 0,
+      recentOrders: []
+    })
   }
 } 
