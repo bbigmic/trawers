@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
 
@@ -8,11 +7,16 @@ export async function GET() {
     // Sprawdź czy baza danych jest dostępna
     if (!process.env.DATABASE_URL) {
       console.error('Brak DATABASE_URL')
-      return NextResponse.json(
-        { error: 'Baza danych nie jest skonfigurowana' },
-        { status: 500 }
-      )
+      return NextResponse.json({
+        totalCourses: 0,
+        totalOrders: 0,
+        totalRevenue: 0,
+        recentOrders: []
+      })
     }
+
+    // Lazy load Prisma tylko gdy jest potrzebne
+    const { prisma } = await import('@/lib/prisma')
 
     const [
       totalCourses,
