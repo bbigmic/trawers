@@ -3,6 +3,9 @@ import { prisma } from '../../lib/prisma'
 import { verifyToken } from '../../lib/auth'
 import { cookies } from 'next/headers'
 import { uploadDocument } from '@/lib/cloudinary'
+import { v2 as cloudinary } from 'cloudinary'
+
+export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
