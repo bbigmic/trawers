@@ -4,7 +4,7 @@ import Stripe from 'stripe'
 import { headers } from 'next/headers'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2020-08-27',
+  apiVersion: '2025-02-24.acacia',
 })
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!
