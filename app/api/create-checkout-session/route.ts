@@ -4,6 +4,8 @@ import { verifyToken } from '../../lib/auth'
 import { cookies } from 'next/headers'
 import Stripe from 'stripe'
 
+export const dynamic = 'force-dynamic'
+
 console.log('Dostępne zmienne środowiskowe:', {
   NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
   STRIPE_SECRET_KEY_LENGTH: process.env.STRIPE_SECRET_KEY?.length,
